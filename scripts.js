@@ -210,7 +210,7 @@ class Tree {
     if (node !== null) {
       return this.calculateHeight(node);
     } else {
-      return -1;
+      return null;
     }
   }
 
@@ -239,6 +239,21 @@ class Tree {
       return this.searchNode(node.right, value);
     } else {
       return node; //Node found
+    }
+  }
+
+  depth(value, node = this.root, currentDepth = 0) {
+    if (node === null) {
+      return -1;
+    }
+
+    if (value === node.val) {
+      console.log("depth = " + currentDepth);
+      return currentDepth;
+    } else if (value > node.val) {
+      return this.depth(value, node.right, currentDepth + 1);
+    } else {
+      return this.depth(value, node.left, currentDepth + 1);
     }
   }
 }
