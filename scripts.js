@@ -229,17 +229,15 @@ class Tree {
   }
 
   searchNode(node, value) {
-    console.log(`Visiting node with value: ${node ? node.value : "null"}`);
     if (node === null) {
       return null;
     }
 
-    if (value < node.value) {
+    if (value < node.val) {
       return this.searchNode(node.left, value);
-    } else if (value > node.value) {
+    } else if (value > node.val) {
       return this.searchNode(node.right, value);
     } else {
-      console.log(`Found node with value: ${node.value}`);
       return node; //Node found
     }
   }
