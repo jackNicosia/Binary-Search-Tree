@@ -126,7 +126,7 @@ class Tree {
         queue.push(current.right);
       }
     }
-    console.log(result);
+
     return result;
   }
 
@@ -150,7 +150,6 @@ class Tree {
     traverse(node);
 
     if (!callback) {
-      console.log(values);
       return values;
     }
   }
@@ -175,7 +174,6 @@ class Tree {
     traverse(node);
 
     if (!callback) {
-      console.log(values);
       return values;
     }
   }
@@ -200,7 +198,6 @@ class Tree {
     traverse(node);
 
     if (!callback) {
-      console.log(values);
       return values;
     }
   }
@@ -256,6 +253,37 @@ class Tree {
       return this.depth(value, node.left, currentDepth + 1);
     }
   }
+
+  isBalanced(node = this.root) {
+    if (node === null) {
+      return true; // A null tree is balanced.
+    }
+
+    let leftHeight = this.calculateHeight(node.left);
+    let rightHeight = this.calculateHeight(node.right);
+
+    let isCurrentNodeBalanced = Math.abs(leftHeight - rightHeight) <= 1;
+
+    return (
+      isCurrentNodeBalanced &&
+      this.isBalanced(node.left) &&
+      this.isBalanced(node.right)
+    );
+  }
+
+  rebalanceTree() {
+    let newTreeArray = [];
+    function traverse(node) {
+      if (node === null) return;
+      traverse(node.left);
+      newTreeArray.push(node.val);
+      traverse(node.right);
+    }
+
+    traverse(this.root); // newTree now contains an array of the values from the tree.
+    console.log(newTreeArray);
+    this.root = this.buildTree(newTreeArray);
+  }
 }
 
 // function to print the tree in a structured format
@@ -271,13 +299,41 @@ const prettyPrint = (root, prefix = "", isLeft = true) => {
   }
 };
 
+// Driver script
+
+const driverData = Array.from({ length: 15 }, () =>
+  Math.floor(Math.random() * 50)
+);
+
+const tree = new Tree(driverData);
+prettyPrint(tree.root);
+console.log("Tree is balanced? : ", tree.isBalanced());
+console.log("level order: ", tree.levelOrder());
+console.log("pre order: ", tree.preOrder());
+console.log("post order: ", tree.postOrder());
+console.log("in order: ", tree.inOrder());
+const valuesToInsert = [7, 11, 13];
+console.log("insert 7, 11, and 13");
+valuesToInsert.forEach((value) => tree.insert(value));
+prettyPrint(tree.root);
+console.log("Tree still balanced? : ", tree.isBalanced());
+console.log("rebalance tree");
+tree.rebalanceTree();
+console.log("Tree back to balanced? : ", tree.isBalanced());
+prettyPrint(tree.root);
+console.log("level order: ", tree.levelOrder());
+console.log("pre order: ", tree.preOrder());
+console.log("post order: ", tree.postOrder());
+console.log("in order: ", tree.inOrder());
+
+/*
 // Example usage
 const treeData = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 /*const treeData = Array.from({ length: 15 }, () =>
   Math.floor(Math.random() * 50)
 );
 */
-
+/*
 const tree = new Tree(treeData);
 prettyPrint(tree.root);
 console.log(tree);
@@ -285,7 +341,7 @@ console.log(tree);
 tree.delete(3);
 console.log("delete 3 and insert 11.");
 tree.insert(11);
-tree.insert();
+tree.insert(2);
 
 prettyPrint(tree.root);
 
@@ -299,29 +355,4 @@ tree.preOrder();
 console.log("postOrder");
 tree.postOrder();
 console.log("tree height", tree.height(11));
-
-/*
-  
-
-    Write a height function that accepts a root and returns its height. Height is defined as the number of edges in the longest path from a given root to a leaf root.
-
-    Write a depth function that accepts a root and returns its depth. Depth is defined as the number of edges in the path from a given root to the tree’s root root.
-
-    Write an isBalanced function that checks if the tree is balanced. A balanced tree is one where the difference between heights of the left subtree and the right subtree of every root is not more than 1.
-
-    Write a rebalance function that rebalances an unbalanced tree. Tip: You’ll want to use a traversal method to provide a new array to the buildTree function.
-
-Tie it all together
-
-Write a driver script that does the following:
-
-    Create a binary search tree from an array of random numbers < 100. You can create a function that returns an array of random numbers every time you call it if you wish.
-    Confirm that the tree is balanced by calling isBalanced.
-    Print out all elements in level, pre, post, and in order.
-    Unbalance the tree by adding several numbers > 100.
-    Confirm that the tree is unbalanced by calling isBalanced.
-    Balance the tree by calling rebalance.
-    Confirm that the tree is balanced by calling isBalanced.
-    Print out all elements in level, pre, post, and in order.
-
 */
